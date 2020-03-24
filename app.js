@@ -87,7 +87,10 @@ var UIController = (function(){
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
         expensesContainer: '.expenses__list',
-        
+        budgetIncVal: '.budget__income--value',
+        budgetExpVal: '.budget__expenses--value',
+        budgetExpPercentage: '.budget__expenses--percentage',
+        budgetVal: '.budget__value',
     };
     
     return {
@@ -126,7 +129,14 @@ var UIController = (function(){
                 current.value ="";
             })
             fieldsArray[0].focus();
+        },
+        displayBudget: function(data){
+            document.querySelector(DOMstrings.budgetVal).textContent =data.budget;
+            document.querySelector(DOMstrings.budgetIncVal).textContent = data.totalInc;
+            document.querySelector(DOMstrings.budgetExpVal).textContent = data.totalExp;
+            document.querySelector(DOMstrings.budgetExpPercentage).textContent = (data.percentage > 0 ? data.percentage + '%' : '---');
         }
+        
         
     };
     
@@ -149,7 +159,7 @@ var controller = (function(budgetCtrl, uiCtrl){
         // get budget calculation
         var budget = budgetCtrl.getBudget();
         // send to Ui
-        console.log(budget);
+        uiCtrl.displayBudget(budget);
     }
     
     // 1.  Get the field input data
@@ -164,7 +174,6 @@ var controller = (function(budgetCtrl, uiCtrl){
             // 4. clear fields in Ui form
             uiCtrl.clearFields();
             // 5. calc and update budget
-        
             updateBudget();
         }
     }
@@ -172,6 +181,13 @@ var controller = (function(budgetCtrl, uiCtrl){
     return {
         init: function(){
             setupEventListeners();
+            uiCtrl.displayBudget({
+                
+                    budget: 0,
+                    totalInc: 0,
+                    totalExp: 0,
+                    percentage: -1,
+            });
         }
     }
     
