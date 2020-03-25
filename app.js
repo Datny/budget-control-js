@@ -49,6 +49,18 @@ var budgetControler = (function(){
         return newItem;
             
         },
+        
+        deleteItem: function(id, type){
+            var ids, index;
+            ids = data.allItems[type].map(function(current){
+                return current.id;
+            });
+            index  = ids.indexOf(id);
+            if (index !== -1){
+                data.allItems[type].splice(index, 1);
+            }
+        
+        },
         testing: function(){
             console.log(data);
         },
@@ -150,7 +162,6 @@ var controller = (function(budgetCtrl, uiCtrl){
                 ctrlAddItem();
             }
         });
-        
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
     
     };
@@ -185,15 +196,14 @@ var controller = (function(budgetCtrl, uiCtrl){
         itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
         if (itemID){
             splitID = itemID.split('-');
-            ID = splitID[1];
+            ID = parseInt(splitID[1]);
             type = splitID[0];
             //1 delete item from data structure
-            budgetCtrl.deleteItemBud(ID);
+            budgetCtrl.deleteItem(ID, type);
             //2 delete the item from UI
-            uiCtrl.deleteItemUi(ID);
+            //uiCtrl.deleteItemUi(ID);
             //3 update and show new budget 
             updateBudget();
-            
         }
     }
     
